@@ -1,6 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { SunIcon, MoonIcon } from "@heroicons/react/solid";
+import Image from "next/image";
 
 export default function Header({ toggleTheme, theme }) {
   const { data: session } = useSession();
@@ -57,9 +57,19 @@ export default function Header({ toggleTheme, theme }) {
             className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-700 flex items-center"
           >
             {theme === "light" ? (
-              <SunIcon className="h-5 w-5 text-yellow-500" />
+              <Image
+                src="/icons/sun.png"
+                alt="Sun Icon"
+                width={20}
+                height={20}
+              />
             ) : (
-              <MoonIcon className="h-5 w-5 text-gray-300" />
+              <Image
+                src="/icons/moon.png"
+                alt="Moon Icon"
+                width={20}
+                height={20}
+              />
             )}
           </button>
           {session ? (

@@ -109,7 +109,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4">
         Welcome to your Dashboard, {session.user?.name || "User"}
       </h1>
@@ -120,7 +120,7 @@ export default function Dashboard() {
         Create Post
       </button>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl">
-        <div className="bg-white p-8 rounded shadow-md">
+        <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md">
           <h2 className="text-2xl font-bold mb-4">Recent Drafts</h2>
           {drafts.map((draft) => (
             <div
@@ -129,7 +129,9 @@ export default function Dashboard() {
             >
               <div>
                 <h3 className="text-xl font-bold">{draft.title}</h3>
-                <p className="text-gray-700">{draft.content}</p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  {draft.content}
+                </p>
               </div>
               <div className="flex space-x-2">
                 <button
@@ -148,7 +150,7 @@ export default function Dashboard() {
             </div>
           ))}
         </div>
-        <div className="bg-white p-8 rounded shadow-md">
+        <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md">
           <h2 className="text-2xl font-bold mb-4">Explore Posts</h2>
           {explorePosts.map((post) => (
             <div
@@ -157,8 +159,10 @@ export default function Dashboard() {
             >
               <div>
                 <h3 className="text-xl font-bold">{post.title}</h3>
-                <p className="text-gray-700">{post.content}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-gray-700 dark:text-gray-300">
+                  {post.content}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Posted by {post.username}
                 </p>
               </div>
