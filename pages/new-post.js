@@ -19,11 +19,16 @@ export default function NewPost() {
   };
 
   return (
-    <div>
-      <h1>Create a New Post</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold mb-4">Create a New Post</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-2xl">
         <MarkdownEditor value={content} onChange={setContent} />
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

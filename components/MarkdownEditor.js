@@ -9,15 +9,17 @@ const MarkdownEditor = ({ value, onChange }) => {
   const converter = new Showdown.Converter();
 
   return (
-    <ReactMde
-      value={value}
-      onChange={onChange}
-      selectedTab={selectedTab}
-      onTabChange={setSelectedTab}
-      generateMarkdownPreview={(markdown) =>
-        Promise.resolve(converter.makeHtml(markdown))
-      }
-    />
+    <div className="bg-white p-4 rounded shadow-md">
+      <ReactMde
+        value={value}
+        onChange={onChange}
+        selectedTab={selectedTab}
+        onTabChange={setSelectedTab}
+        generateMarkdownPreview={(markdown) =>
+          Promise.resolve(converter.makeHtml(markdown))
+        }
+      />
+    </div>
   );
 };
 
