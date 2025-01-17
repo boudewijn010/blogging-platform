@@ -7,7 +7,7 @@ function savePost($title, $content)
     $stmt = $conn->prepare("INSERT INTO posts (title, content) VALUES (?, ?)");
     $stmt->bind_param("ss", $title, $content);
     if ($stmt->execute()) {
-        return true;
+        return ['id' => $conn->insert_id];
     } else {
         return false;
     }

@@ -43,11 +43,31 @@ export default function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Add logic to save the post
-      console.log("Title:", title);
-      console.log("Content:", content);
+      const response = await fetch("/api/createPost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, content }),
+      });
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+          document.getElementById("viewPostButtonContainer").innerHTML =
+            data.viewPostButton;
+        } else {
+          alert(data.message);
+        }
+      } else {
+        alert("Unexpected response format. Please try again later.");
+      }
     } catch (error) {
       console.error("Error creating post:", error);
+      alert(
+        "An error occurred while creating the post. Please try again later."
+      );
     }
   };
 
@@ -111,6 +131,7 @@ export default function CreatePost() {
           </button>
         </div>
       </form>
+      <div id="viewPostButtonContainer" className="mt-4"></div>
       <button
         onClick={() => router.push("/dashboard")}
         className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
