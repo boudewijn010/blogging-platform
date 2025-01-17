@@ -28,3 +28,8 @@ button {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
+
+.scrollable-container {
+  max-height: 400px; /* Pas de hoogte aan naar wens */
+  overflow-y: none;
+}

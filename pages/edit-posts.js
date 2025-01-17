@@ -13,6 +13,46 @@ const fakeDrafts = [
     title: "Draft Post 2",
     content: "This is the content of draft post 2.",
   },
+  {
+    id: 3,
+    title: "Draft Post 3",
+    content: "This is the content of draft post 3.",
+  },
+  {
+    id: 4,
+    title: "Draft Post 4",
+    content: "This is the content of draft post 4.",
+  },
+  {
+    id: 5,
+    title: "Draft Post 5",
+    content: "This is the content of draft post 5.",
+  },
+  {
+    id: 6,
+    title: "Draft Post 6",
+    content: "This is the content of draft post 6.",
+  },
+  {
+    id: 7,
+    title: "Draft Post 7",
+    content: "This is the content of draft post 7.",
+  },
+  {
+    id: 8,
+    title: "Draft Post 8",
+    content: "This is the content of draft post 8.",
+  },
+  {
+    id: 9,
+    title: "Draft Post 9",
+    content: "This is the content of draft post 9.",
+  },
+  {
+    id: 10,
+    title: "Draft Post 10",
+    content: "This is the content of draft post 10.",
+  },
 ];
 
 export default function EditPosts() {

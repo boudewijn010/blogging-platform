@@ -61,10 +61,8 @@ const fakeExplorePosts = [
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [drafts, setDrafts] = useState(fakeDrafts.slice(0, 3));
-  const [explorePosts, setExplorePosts] = useState(
-    fakeExplorePosts.slice(0, 5)
-  );
+  const [drafts] = useState(fakeDrafts.slice(0, 3));
+  const [explorePosts] = useState(fakeExplorePosts.slice(0, 5));
 
   useEffect(() => {
     console.log("Session status:", status);
