@@ -1,50 +1,30 @@
-import { signIn } from "next-auth/react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-export default function SignIn() {
+export default function RegisterForm() {
   const router = useRouter();
-  const { callbackUrl } = router.query;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    console.log("SignIn page loaded");
-  }, []);
-
-  const handleTestLogin = async () => {
-    // Simulate a successful login with username "root" and password "root"
-    const result = await signIn("credentials", {
-      redirect: false,
-      username: "root",
-      password: "root",
-      callbackUrl: callbackUrl || "/dashboard",
-    });
-    if (result.ok) {
-      router.push(result.url);
-    } else {
-      console.error("Test login failed");
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-      callbackUrl: callbackUrl || "/",
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
     });
-    if (result.ok) {
-      router.push(result.url);
+    if (response.ok) {
+      router.push("/dashboard");
     } else {
-      console.error("Login failed");
+      console.error("Failed to register user");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-4">Sign In</h1>
+      <h1 className="text-4xl font-bold mb-4">Register</h1>
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-white p-8 rounded shadow-md"
@@ -85,27 +65,9 @@ export default function SignIn() {
           type="submit"
           className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
         >
-          Sign in
+          Register
         </button>
       </form>
-      <button
-        onClick={() => signIn("google", { callbackUrl: callbackUrl || "/" })}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-      >
-        Sign in with Google
-      </button>
-      <button
-        onClick={handleTestLogin}
-        className="mt-4 ml-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
-      >
-        Test Login
-      </button>
-      <button
-        onClick={() => router.push("/register_form")}
-        className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-      >
-        Create Account
-      </button>
     </div>
   );
 }
