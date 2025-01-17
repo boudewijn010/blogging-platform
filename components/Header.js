@@ -1,8 +1,8 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import Image from "next/image";
+// import Image from "next/image";
 
-export default function Header({ toggleTheme, theme }) {
+export default function Header({ toggleTheme }) {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -56,7 +56,7 @@ export default function Header({ toggleTheme, theme }) {
             onClick={toggleTheme}
             className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-700 flex items-center"
           >
-            {theme === "light" ? (
+            {/* {theme === "light" ? (
               <Image
                 src="/icons/sun.png"
                 alt="Sun Icon"
@@ -70,7 +70,7 @@ export default function Header({ toggleTheme, theme }) {
                 width={20}
                 height={20}
               />
-            )}
+            )} */}
           </button>
           {session ? (
             <button

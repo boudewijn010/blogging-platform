@@ -1,4 +1,4 @@
-import { saveUser } from "../../../functions/user";
+import { saveUser } from "../../functions/user";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
