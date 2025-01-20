@@ -44,7 +44,7 @@ const fakePosts = [
 export default function Explore() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [posts, setPosts] = useState(fakePosts);
+  const [posts] = useState(fakePosts);
 
   useEffect(() => {
     console.log("Session status:", status);
