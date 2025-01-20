@@ -1,16 +1,16 @@
 import { conn } from "../config/database";
 import bcrypt from "bcrypt";
 
-export async function saveUser(username, password) {
+export async function saveUser(username, email, password) {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const query = "INSERT INTO users (username, password) VALUES (?, ?)";
-  const values = [username, hashedPassword];
+  const query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+  const values = [username, email, hashedPassword];
 
   try {
     const [result] = await conn.execute(query, values);
     return { id: result.insertId };
   } catch (error) {
-    console.error("Error saving user:", error);
+    console.error("Error saving user:", error.message, error.stack);
     return false;
   }
 }
@@ -30,7 +30,7 @@ export async function verifyUser(username, password) {
     }
     return false;
   } catch (error) {
-    console.error("Error verifying user:", error);
+    console.error("Error verifying user:", error.message, error.stack);
     return false;
   }
 }
