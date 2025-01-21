@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { verifyUser } from "../../../functions/user";
 
 export default NextAuth({
   providers: [
@@ -9,15 +10,16 @@ export default NextAuth({
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
-        // Check if the provided credentials match the test credentials
-        if (
-          credentials.username === "root" &&
-          credentials.password === "root"
-        ) {
-          return { id: 1, name: "Test User", email: "root@example.com" };
+      async authorize(credentials) {
+        const user = await verifyUser(
+          credentials.username,
+          credentials.password
+        );
+        if (user) {
+          return user;
+        } else {
+          return null;
         }
-        return null;
       },
     }),
   ],
@@ -25,19 +27,16 @@ export default NextAuth({
     signIn: "/auth/signin",
   },
   callbacks: {
+    async session({ session, token }) {
+      session.user.id = token.id;
+      return session;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.name = token.name;
-      session.user.email = token.email;
-      return session;
-    },
   },
+  debug: true,
 });

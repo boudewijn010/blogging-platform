@@ -7,6 +7,7 @@ export default function SignIn() {
   const { callbackUrl } = router.query;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     console.log("SignIn page loaded");
@@ -33,12 +34,13 @@ export default function SignIn() {
       redirect: false,
       username,
       password,
-      callbackUrl: callbackUrl || "/",
+      callbackUrl: callbackUrl || "/dashboard",
     });
-    if (result.ok) {
-      router.push(result.url);
+
+    if (result.error) {
+      setError(result.error);
     } else {
-      console.error("Login failed");
+      router.push(result.url);
     }
   };
 
@@ -47,7 +49,7 @@ export default function SignIn() {
       <h1 className="text-4xl font-bold mb-4">Sign In</h1>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white p-8 rounded shadow-md"
+        className="w-full max-w-md bg-white p-8 rounded shadow-md"
       >
         <div className="mb-4">
           <label
@@ -63,6 +65,7 @@ export default function SignIn() {
             onChange={(e) => setUsername(e.target.value)}
             required
             className="w-full px-3 py-2 border rounded"
+            autoComplete="username"
           />
         </div>
         <div className="mb-4">
@@ -79,13 +82,15 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
             required
             className="w-full px-3 py-2 border rounded"
+            autoComplete="current-password"
           />
+          {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
         <button
           type="submit"
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
         >
-          Sign in
+          Sign In
         </button>
       </form>
       <button
