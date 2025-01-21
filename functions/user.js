@@ -1,10 +1,10 @@
 import { conn } from "../config/database";
 import bcrypt from "bcrypt";
 
-export async function saveUser(username, email, password) {
+export async function saveUser(username, password) {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-  const values = [username, email, hashedPassword];
+  const query = "INSERT INTO users (username, password) VALUES (?, ?)";
+  const values = [username, hashedPassword];
 
   try {
     const [result] = await conn.execute(query, values);

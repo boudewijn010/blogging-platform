@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    if (saveUser($username, $password)) {
+    if (saveUser($username, $email, $password)) {
         header("Location: /dashboard.php");
         exit();
     } else {
