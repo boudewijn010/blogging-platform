@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 export default function SignIn() {
   const router = useRouter();
@@ -8,25 +8,6 @@ export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    console.log("SignIn page loaded");
-  }, []);
-
-  const handleTestLogin = async () => {
-    // Simulate a successful login with username "root" and password "root"
-    const result = await signIn("credentials", {
-      redirect: false,
-      username: "root",
-      password: "root",
-      callbackUrl: callbackUrl || "/dashboard",
-    });
-    if (result.ok) {
-      router.push(result.url);
-    } else {
-      console.error("Test login failed");
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,18 +74,6 @@ export default function SignIn() {
           Sign In
         </button>
       </form>
-      <button
-        onClick={() => signIn("google", { callbackUrl: callbackUrl || "/" })}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-      >
-        Sign in with Google
-      </button>
-      <button
-        onClick={handleTestLogin}
-        className="mt-4 ml-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
-      >
-        Test Login
-      </button>
       <button
         onClick={() => router.push("/register_form")}
         className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
