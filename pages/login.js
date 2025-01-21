@@ -36,7 +36,6 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-8 rounded shadow-md"
       >
-        {error && <div className="mb-4 text-red-500">{error}</div>}
         <div className="mb-4">
           <label
             htmlFor="username"
@@ -70,6 +69,7 @@ export default function Login() {
             className="w-full px-3 py-2 border rounded"
             autoComplete="current-password"
           />
+          {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
         <button
           type="submit"
