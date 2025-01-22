@@ -1,10 +1,11 @@
 import { conn } from "../config/database";
 import bcrypt from "bcrypt";
 
-export async function saveUser(username, password) {
+export async function saveUser(username, email, password) {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const query = "INSERT INTO users (username, password) VALUES (?, ?)";
-  const values = [username, hashedPassword];
+  const query =
+    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+  const values = [username, email, hashedPassword];
 
   try {
     const [result] = await conn.execute(query, values);
@@ -21,20 +22,12 @@ export async function verifyUser(username, password) {
 
   try {
     const [rows] = await conn.execute(query, values);
-    console.log("Query executed. Found rows:", rows);
-
     if (rows.length > 0) {
       const user = rows[0];
-      console.log("User found:", user);
-
       const isValid = await bcrypt.compare(password, user.password);
-      console.log("Password comparison result:", isValid);
-
       if (isValid) {
         return user;
       }
-    } else {
-      console.warn("No user found with the username:", username);
     }
     return false;
   } catch (error) {
