@@ -13,15 +13,14 @@ export default function ViewPosts() {
     const fetchPosts = async () => {
       try {
         const response = await fetch("/api/get-posts");
-        const data = await response.json();
-        if (response.ok) {
-          const newPosts = data.posts.filter(
-            (post) => !posts.some((p) => p.id === post.id)
-          );
-          setPosts(newPosts);
-        } else {
-          console.error(data.message);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
+        const data = await response.json();
+        const newPosts = data.posts.filter(
+          (post) => !posts.some((p) => p.id === post.id)
+        );
+        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }

@@ -16,13 +16,17 @@ export default function Dashboard() {
     const fetchPosts = async () => {
       try {
         const response = await fetch("/api/get-posts");
-        const data = await response.json();
-        if (response.ok) {
-          setExplorePosts(data.posts);
-        } else {
-          setError(data.message);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error fetching posts:", errorData.message);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
         }
-      } catch {
+        const data = await response.json();
+        setExplorePosts(data.posts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
         setError("Failed to fetch posts");
       }
     };
