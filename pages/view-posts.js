@@ -2,27 +2,31 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const fakePosts = [
-  {
-    id: 1,
-    title: "Published Post 1",
-    content: "This is the content of published post 1.",
-  },
-  {
-    id: 2,
-    title: "Published Post 2",
-    content: "This is the content of published post 2.",
-  },
-];
-
 export default function ViewPosts() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [posts, setPosts] = useState(fakePosts);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     console.log("Session status:", status);
     console.log("Session data:", session);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/get-posts");
+        const data = await response.json();
+        if (response.ok) {
+          const newPosts = data.posts.filter(
+            (post) => !posts.some((p) => p.id === post.id)
+          );
+          setPosts(newPosts);
+        } else {
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+    fetchPosts();
   }, [status, session]);
 
   if (status === "loading") {

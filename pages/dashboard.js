@@ -2,72 +2,35 @@ import { useSession, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const fakeDrafts = [
-  {
-    id: 1,
-    title: "Draft Post 1",
-    content: "This is the content of draft post 1.",
-  },
-  {
-    id: 2,
-    title: "Draft Post 2",
-    content: "This is the content of draft post 2.",
-  },
-  {
-    id: 3,
-    title: "Draft Post 3",
-    content: "This is the content of draft post 3.",
-  },
-  {
-    id: 4,
-    title: "Draft Post 4",
-    content: "This is the content of draft post 4.",
-  },
-];
-
-const fakeExplorePosts = [
-  {
-    id: 1,
-    title: "Post 1",
-    content: "This is the content of post 1.",
-    username: "user1",
-  },
-  {
-    id: 2,
-    title: "Post 2",
-    content: "This is the content of post 2.",
-    username: "user2",
-  },
-  {
-    id: 3,
-    title: "Post 3",
-    content: "This is the content of post 3.",
-    username: "user3",
-  },
-  {
-    id: 4,
-    title: "Post 4",
-    content: "This is the content of post 4.",
-    username: "user4",
-  },
-  {
-    id: 5,
-    title: "Post 5",
-    content: "This is the content of post 5.",
-    username: "user5",
-  },
-];
-
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [drafts] = useState(fakeDrafts.slice(0, 3));
-  const [explorePosts] = useState(fakeExplorePosts.slice(0, 5));
+  const [drafts, setDrafts] = useState([]);
+  const [explorePosts, setExplorePosts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     console.log("Session status:", status);
     console.log("Session data:", session);
-  }, [status, session]);
+
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/get-posts");
+        const data = await response.json();
+        if (response.ok) {
+          setExplorePosts(data.posts);
+        } else {
+          setError(data.message);
+        }
+      } catch {
+        setError("Failed to fetch posts");
+      }
+    };
+
+    if (session) {
+      fetchPosts();
+    }
+  }, [session, status]);
 
   if (status === "loading") {
     return (
@@ -111,6 +74,11 @@ export default function Dashboard() {
       <h1 className="text-4xl font-bold mb-4">
         Welcome to your Dashboard, {session.user?.name || "User"}
       </h1>
+      {error && (
+        <div className="mb-4 px-4 py-2 bg-red-500 text-white rounded">
+          {error}
+        </div>
+      )}
       <button
         onClick={() => router.push("/create-post")}
         className="mb-8 px-6 py-3 bg-blue-600 text-white text-lg font-bold rounded hover:bg-blue-800"
