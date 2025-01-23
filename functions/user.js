@@ -2,8 +2,8 @@ import { conn } from "../config/database";
 import bcrypt from "bcrypt";
 
 export async function saveUser(username, email, password) {
-  if (!username || !password) {
-    throw new Error("Username and password are required");
+  if (!username || !email || !password) {
+    throw new Error("Username, email, and password are required");
   }
 
   const saltRounds = 10;

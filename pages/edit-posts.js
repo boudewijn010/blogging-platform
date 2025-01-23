@@ -5,11 +5,29 @@ import { useEffect, useState } from "react";
 export default function EditPosts() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [drafts] = useState(fakeDrafts);
+  const [drafts, setDrafts] = useState([]);
 
   useEffect(() => {
     console.log("Session status:", status);
     console.log("Session data:", session);
+
+    const fetchDrafts = async () => {
+      try {
+        const response = await fetch("/api/get-drafts");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error fetching drafts:", errorData.message);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        const data = await response.json();
+        setDrafts(data.drafts);
+      } catch (error) {
+        console.error("Error fetching drafts:", error);
+      }
+    };
+    fetchDrafts();
   }, [status, session]);
 
   if (status === "loading") {

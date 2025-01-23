@@ -14,7 +14,11 @@ export default function ViewPosts() {
       try {
         const response = await fetch("/api/get-posts");
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          const errorData = await response.json();
+          console.error("Error fetching posts:", errorData.message);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
         }
         const data = await response.json();
         const newPosts = data.posts.filter(
@@ -26,7 +30,7 @@ export default function ViewPosts() {
       }
     };
     fetchPosts();
-  }, [status, session]);
+  }, [status, session, posts]);
 
   if (status === "loading") {
     return (

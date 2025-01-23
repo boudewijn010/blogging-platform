@@ -1,50 +1,10 @@
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-
-const fakePosts = [
-  {
-    id: 1,
-    title: "Post 1",
-    content: "This is the content of post 1.",
-    username: "user1",
-  },
-  {
-    id: 2,
-    title: "Post 2",
-    content: "This is the content of post 2.",
-    username: "user2",
-  },
-  {
-    id: 3,
-    title: "Post 3",
-    content: "This is the content of post 3.",
-    username: "user3",
-  },
-  {
-    id: 4,
-    title: "Post 4",
-    content: "This is the content of post 4.",
-    username: "user4",
-  },
-  {
-    id: 5,
-    title: "Post 5",
-    content: "This is the content of post 5.",
-    username: "user5",
-  },
-  {
-    id: 6,
-    title: "Post 6",
-    content: "This is the content of post 6.",
-    username: "user6",
-  },
-];
+import { useEffect } from "react";
 
 export default function Explore() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [posts] = useState(fakePosts);
 
   useEffect(() => {
     console.log("Session status:", status);
