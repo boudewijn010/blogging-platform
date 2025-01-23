@@ -35,3 +35,20 @@ export async function getPostsByUser(userId) {
     throw new Error("Database query failed");
   }
 }
+
+export async function getPostById(id) {
+  const query = "SELECT * FROM posts WHERE id = ?";
+  const values = [id];
+  try {
+    const [rows] = await conn.execute(query, values);
+    if (rows.length === 0) {
+      throw new Error("Post not found");
+    }
+    return rows[0];
+  } catch (error) {
+    console.error("Error fetching post by ID:", error.message, error.stack);
+    console.error("Response status:", error.response?.status);
+    console.error("Response message:", error.response?.data?.message);
+    throw new Error("Database query failed");
+  }
+}
