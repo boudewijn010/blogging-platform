@@ -1,14 +1,36 @@
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Explore() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     console.log("Session status:", status);
     console.log("Session data:", session);
+
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/get-posts");
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error fetching posts:", errorData.message);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
+        }
+        const data = await response.json();
+        setPosts(data.posts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    if (session) {
+      fetchPosts();
+    }
   }, [status, session]);
 
   if (status === "loading") {

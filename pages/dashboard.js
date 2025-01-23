@@ -14,8 +14,14 @@ export default function Dashboard() {
     console.log("Session data:", session);
 
     const fetchPosts = async () => {
+      if (!session?.user?.id) {
+        console.error("User ID is undefined");
+        return;
+      }
       try {
-        const response = await fetch("/api/get-posts");
+        const response = await fetch(
+          `/api/get-posts?userId=${session.user.id}`
+        );
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error fetching posts:", errorData.message);
@@ -93,58 +99,66 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl">
         <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md">
           <h2 className="text-2xl font-bold mb-4">Recent Drafts</h2>
-          {drafts.map((draft) => (
-            <div
-              key={draft.id}
-              className="flex justify-between items-center mb-4"
-            >
-              <div>
-                <h3 className="text-xl font-bold">{draft.title}</h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  {draft.content}
-                </p>
+          {drafts && drafts.length > 0 ? (
+            drafts.map((draft) => (
+              <div
+                key={draft.id}
+                className="flex justify-between items-center mb-4"
+              >
+                <div>
+                  <h3 className="text-xl font-bold">{draft.title}</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {draft.content}
+                  </p>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleEdit(draft.id)}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-700"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handlePost(draft.id)}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+                  >
+                    Post
+                  </button>
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleEdit(draft.id)}
-                  className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-700"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handlePost(draft.id)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-                >
-                  Post
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No drafts available.</p>
+          )}
         </div>
         <div className="bg-white dark:bg-gray-800 p-8 rounded shadow-md">
           <h2 className="text-2xl font-bold mb-4">Explore Posts</h2>
-          {explorePosts.map((post) => (
-            <div
-              key={post.id}
-              className="flex justify-between items-center mb-4"
-            >
-              <div>
-                <h3 className="text-xl font-bold">{post.title}</h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                  {post.content}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Posted by {post.username}
-                </p>
-              </div>
-              <button
-                onClick={() => handleRead(post.id)}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          {explorePosts && explorePosts.length > 0 ? (
+            explorePosts.map((post) => (
+              <div
+                key={post.id}
+                className="flex justify-between items-center mb-4"
               >
-                Read
-              </button>
-            </div>
-          ))}
+                <div>
+                  <h3 className="text-xl font-bold">{post.title}</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {post.content}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Posted by {post.username}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleRead(post.id)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                >
+                  Read
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No posts available.</p>
+          )}
         </div>
       </div>
     </div>

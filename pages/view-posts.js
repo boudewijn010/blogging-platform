@@ -11,8 +11,14 @@ export default function ViewPosts() {
     console.log("Session status:", status);
     console.log("Session data:", session);
     const fetchPosts = async () => {
+      if (!session?.user?.id) {
+        console.error("User ID is undefined");
+        return;
+      }
       try {
-        const response = await fetch("/api/get-posts");
+        const response = await fetch(
+          `/api/get-posts?userId=${session.user.id}`
+        );
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error fetching posts:", errorData.message);
@@ -21,16 +27,15 @@ export default function ViewPosts() {
           );
         }
         const data = await response.json();
-        const newPosts = data.posts.filter(
-          (post) => !posts.some((p) => p.id === post.id)
-        );
-        setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+        setPosts(data.posts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
-    fetchPosts();
-  }, [status, session, posts]);
+    if (session) {
+      fetchPosts();
+    }
+  }, [status, session]);
 
   if (status === "loading") {
     return (
