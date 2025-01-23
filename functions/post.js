@@ -1,8 +1,9 @@
 import { conn } from "../config/database";
 
-export async function savePost(title, content, userId) {
-  const query = "INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)";
-  const values = [title, content, userId];
+export async function savePost(title, content, userId, isDraft = false) {
+  const query =
+    "INSERT INTO posts (title, content, user_id, is_draft) VALUES (?, ?, ?, ?)";
+  const values = [title, content, userId, isDraft];
 
   try {
     const [result] = await conn.execute(query, values);
@@ -14,7 +15,7 @@ export async function savePost(title, content, userId) {
 }
 
 export async function getPosts() {
-  const query = "SELECT * FROM posts";
+  const query = "SELECT * FROM posts WHERE is_draft = FALSE";
   try {
     const [rows] = await conn.execute(query);
     return rows;
@@ -25,13 +26,25 @@ export async function getPosts() {
 }
 
 export async function getPostsByUser(userId) {
-  const query = "SELECT * FROM posts WHERE user_id = ?";
+  const query = "SELECT * FROM posts WHERE user_id = ? AND is_draft = FALSE";
   const values = [userId];
   try {
     const [rows] = await conn.execute(query, values);
     return rows;
   } catch (error) {
     console.error("Error fetching posts by user:", error.message, error.stack);
+    throw new Error("Database query failed");
+  }
+}
+
+export async function getDraftsByUser(userId) {
+  const query = "SELECT * FROM posts WHERE user_id = ? AND is_draft = TRUE";
+  const values = [userId];
+  try {
+    const [rows] = await conn.execute(query, values);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching drafts by user:", error.message, error.stack);
     throw new Error("Database query failed");
   }
 }

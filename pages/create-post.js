@@ -14,6 +14,8 @@ export default function CreatePost() {
     console.log("Session data:", session);
   }, [status, session]);
 
+  console.log("Client session:", session); // Log the session on the client side
+
   if (status === "loading") {
     console.log("Loading component rendered");
     return (
@@ -61,6 +63,8 @@ export default function CreatePost() {
           alert(data.message);
         }
       } else {
+        const responseText = await response.text();
+        console.error("Unexpected response format:", responseText);
         alert("Unexpected response format. Please try again later.");
       }
     } catch (error) {
@@ -73,12 +77,36 @@ export default function CreatePost() {
 
   const handleSaveDraft = async (e) => {
     e.preventDefault();
+    if (!session) {
+      alert("You must be logged in to save a draft");
+      return;
+    }
     try {
-      // Add logic to save the post as a draft
-      console.log("Draft Title:", title);
-      console.log("Draft Content:", content);
+      const response = await fetch("/api/saveDraft", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, content, userId: session.user.id }),
+      });
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message);
+        } else {
+          alert(data.message);
+        }
+      } else {
+        const responseText = await response.text();
+        console.error("Unexpected response format:", responseText);
+        alert("Unexpected response format. Please try again later.");
+      }
     } catch (error) {
       console.error("Error saving draft:", error);
+      alert(
+        "An error occurred while saving the draft. Please try again later."
+      );
     }
   };
 

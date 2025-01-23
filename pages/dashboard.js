@@ -80,6 +80,14 @@ export default function Dashboard() {
     router.push(`/view-post/${id}`);
   };
 
+  const truncateText = (text, wordLimit) => {
+    const words = text.split(" ");
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(" ") + "...";
+    }
+    return text;
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4">
@@ -106,9 +114,11 @@ export default function Dashboard() {
                 className="flex justify-between items-center mb-4"
               >
                 <div>
-                  <h3 className="text-xl font-bold">{draft.title}</h3>
+                  <h3 className="text-xl font-bold">
+                    {truncateText(draft.title, 5)}
+                  </h3>
                   <p className="text-gray-700 dark:text-gray-300">
-                    {draft.content}
+                    {truncateText(draft.content, 10)}
                   </p>
                 </div>
                 <div className="flex space-x-2">
@@ -140,9 +150,11 @@ export default function Dashboard() {
                 className="flex justify-between items-center mb-4"
               >
                 <div>
-                  <h3 className="text-xl font-bold">{post.title}</h3>
+                  <h3 className="text-xl font-bold">
+                    {truncateText(post.title, 5)}
+                  </h3>
                   <p className="text-gray-700 dark:text-gray-300">
-                    {post.content}
+                    {truncateText(post.content, 10)}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     Posted by {post.username}

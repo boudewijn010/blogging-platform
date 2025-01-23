@@ -12,8 +12,14 @@ export default function EditPosts() {
     console.log("Session data:", session);
 
     const fetchDrafts = async () => {
+      if (!session?.user?.id) {
+        console.error("User ID is undefined");
+        return;
+      }
       try {
-        const response = await fetch("/api/get-drafts");
+        const response = await fetch(
+          `/api/get-drafts?userId=${session.user.id}`
+        );
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error fetching drafts:", errorData.message);
@@ -27,7 +33,9 @@ export default function EditPosts() {
         console.error("Error fetching drafts:", error);
       }
     };
-    fetchDrafts();
+    if (session) {
+      fetchDrafts();
+    }
   }, [status, session]);
 
   if (status === "loading") {
