@@ -25,6 +25,7 @@ export default function Dashboard() {
         }
         const data = await response.json();
         setExplorePosts(data.posts);
+        setDrafts(data.drafts); // Assuming the API returns drafts as well
       } catch (error) {
         console.error("Error fetching posts:", error);
         setError("Failed to fetch posts");

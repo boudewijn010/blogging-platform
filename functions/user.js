@@ -2,7 +2,12 @@ import { conn } from "../config/database";
 import bcrypt from "bcrypt";
 
 export async function saveUser(username, email, password) {
-  const hashedPassword = await bcrypt.hash(password, 10);
+  if (!username || !password) {
+    throw new Error("Username and password are required");
+  }
+
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
   const query =
     "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
   const values = [username, email, hashedPassword];
