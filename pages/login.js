@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 export default function Login() {
   const router = useRouter();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -15,7 +16,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, email, password }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -52,6 +53,23 @@ export default function Login() {
             required
             className="w-full px-3 py-2 border rounded"
             autoComplete="username"
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-3 py-2 border rounded"
+            autoComplete="email"
           />
         </div>
         <div className="mb-4">

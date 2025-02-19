@@ -13,6 +13,11 @@ export async function saveUser(username, email, password) {
   const values = [username, email, hashedPassword];
 
   try {
+    console.log("Saving user to database:", {
+      username,
+      email,
+      hashedPassword,
+    });
     const stmt = await conn.prepare(query);
     const result = await stmt.run(values);
     await stmt.finalize();
@@ -28,15 +33,22 @@ export async function verifyUser(username, password) {
   const values = [username];
 
   try {
+    console.log("Querying user from database:", { username });
     const stmt = await conn.prepare(query);
     const rows = await stmt.all(values);
     await stmt.finalize();
     if (rows.length > 0) {
       const user = rows[0];
+      console.log("User found:", { username });
       const isValid = await bcrypt.compare(password, user.password);
       if (isValid) {
+        console.log("Password is valid for user:", { username });
         return user;
+      } else {
+        console.log("Invalid password for user:", { username });
       }
+    } else {
+      console.log("User not found:", { username });
     }
     return false;
   } catch (error) {
