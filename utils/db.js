@@ -1,13 +1,14 @@
-import mysql from "mysql2/promise";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const db = await open({
+  filename: "./database.sqlite",
+  driver: sqlite3.Database,
 });
 
 export async function query(sql, params) {
-  const [results] = await pool.execute(sql, params);
-  return results;
+  const stmt = await db.prepare(sql);
+  const result = await stmt.all(params);
+  await stmt.finalize();
+  return result;
 }

@@ -1,8 +1,7 @@
-import mysql from "mysql2/promise";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 
-export const conn = await mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "blogging_platform",
+export const conn = await open({
+  filename: "./database.sqlite",
+  driver: sqlite3.Database,
 });

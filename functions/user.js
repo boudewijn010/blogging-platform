@@ -13,8 +13,10 @@ export async function saveUser(username, email, password) {
   const values = [username, email, hashedPassword];
 
   try {
-    const [result] = await conn.execute(query, values);
-    return { id: result.insertId };
+    const stmt = await conn.prepare(query);
+    const result = await stmt.run(values);
+    await stmt.finalize();
+    return { id: result.lastID };
   } catch (error) {
     console.error("Error saving user:", error.message, error.stack);
     return false;
@@ -26,7 +28,9 @@ export async function verifyUser(username, password) {
   const values = [username];
 
   try {
-    const [rows] = await conn.execute(query, values);
+    const stmt = await conn.prepare(query);
+    const rows = await stmt.all(values);
+    await stmt.finalize();
     if (rows.length > 0) {
       const user = rows[0];
       const isValid = await bcrypt.compare(password, user.password);
