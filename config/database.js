@@ -7,5 +7,6 @@ const db = new sqlite3.Database("./database.sqlite", (err) => {
     console.log("Database opened successfully");
   }
 });
+console.log("Database connection established");
 
 export const conn = db;
